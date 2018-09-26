@@ -3,7 +3,7 @@ package sports;
 
 public abstract class Sport {
     private String name;
-    private int PLAYERS_PER_TEAM = 0;
+    private int PLAYERS_PER_TEAM = 2;
     private final int MIN_PLAYERS;
 
     public Sport(String name) {
