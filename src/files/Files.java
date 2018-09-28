@@ -4,6 +4,7 @@ package files;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import sports.SportsEnum;
 
 public class Files {
     static ArrayList<Student> students = new ArrayList<>();
@@ -17,12 +18,9 @@ public class Files {
         File sportsDir = new File(sportsDirRoute);
         sportsDir.mkdir();
 
-        // Make sport file
-        File sportFile = new File(sportsDirRoute + separator + "hola.txt");
-
         try {
-            if (!sportFile.createNewFile()) {
-                System.out.println("File already exists!");
+            for (SportsEnum s : SportsEnum.values()) {
+                new File(sportsDirRoute + separator + s).createNewFile();
             }
         } catch (IOException e) {
             System.out.println("Error: " + e);
