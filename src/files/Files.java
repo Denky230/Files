@@ -2,9 +2,10 @@
 package files;
 
 import java.io.File;
-import java.io.IOException;
+
+import java.nio.file.LinkOption;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import sports.SportsEnum;
 
 public class Files {
     static ArrayList<Student> students = new ArrayList<>();
@@ -12,18 +13,25 @@ public class Files {
     public static void main(String[] args) {
         String separator = File.separator;
         String rootRoute = System.getProperty("user.dir");
-
-        // Make sports directory
+        // SPORTS DIRECTORY
         String sportsDirRoute = rootRoute + separator + "sports";
         File sportsDir = new File(sportsDirRoute);
-        sportsDir.mkdir();
+        // SPORTS MANAGER
+        String sportsManagerRoute = rootRoute + separator + ".sportsManager.txt";
+        File sportsManager = new File(sportsManagerRoute);
 
+        // Check if folder struct exists, if not make it
         try {
-            for (SportsEnum s : SportsEnum.values()) {
-                new File(sportsDirRoute + separator + s).createNewFile();
+            if (!sportsManager.exists()) {
+                sportsManager.createNewFile();
+                java.nio.file.Files.setAttribute(Paths.get(sportsManagerRoute), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);            
             }
-        } catch (IOException e) {
-            System.out.println("Error: " + e);
+            if (!sportsDir.exists()) {
+                sportsDir.mkdir();
+                // TO DO: create sports folders
+            }
+        } catch (Exception e) {
+            System.out.println("No se ha podido crear la estructura del programa - Error: " + e);
         }
     }
 }
