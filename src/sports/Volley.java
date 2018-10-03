@@ -2,14 +2,22 @@
 package sports;
 
 public class Volley extends Sport {
+    private static final int MIN_PLAYERS = 5;
+    private static Volley instance = new Volley();
 
-    @Override
-    public boolean isReadyToPlay() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private Volley() {}
+
+    public static Volley getInstance() {
+        return instance;
     }
 
     @Override
-    public String getDetails() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String isReadyToPlay() {
+        return "OK";
+    }
+
+    @Override
+    public String toString() {
+        return super.toString(); //To change body of generated methods, choose Tools | Templates.
     }
 }
