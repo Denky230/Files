@@ -7,8 +7,13 @@ import sports.*;
 public class SportsManager {
     private static ArrayList<Sport> sports = new ArrayList<>();
 
-    public static ArrayList<Sport> getSports() {
-        return sports;
+    public static ArrayList<String> getSports() {
+        ArrayList<String> sportsNames = new ArrayList<>();
+        for (Sport sport : sports) {
+            sportsNames.add(sport.getClass().getSimpleName());
+        }
+
+        return sportsNames;
     }
 
     /**
