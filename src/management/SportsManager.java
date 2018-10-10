@@ -7,10 +7,23 @@ import sports.*;
 public class SportsManager {
     private static ArrayList<Sport> sports = new ArrayList<>();
 
-    public static ArrayList<String> getSports() {
-        ArrayList<String> sportsNames = new ArrayList<>();
-        for (Sport sport : sports) {
-            sportsNames.add(sport.getClass().getSimpleName());
+    /**
+     * TEST
+     * Sout sports
+     */
+    public static void soutSports() {
+        for (Sport s : sports) {
+            System.out.print(s.getClass().getSimpleName() + " ");
+        }
+    }
+
+    /**
+     * @return array of sports names as strings
+     */
+    public static String[] getSports() {
+        String[] sportsNames = new String[sports.size()];
+        for (int i = 0; i < sportsNames.length; i++) {
+            sportsNames[i] = sports.get(i).getClass().getSimpleName();
         }
 
         return sportsNames;
@@ -22,14 +35,16 @@ public class SportsManager {
      */
     public static void removeSports(String[] sportNames) {
         for (String sportString : sportNames) {
-            for (Sport sport : sports) {
-                if (sport.getClass().getSimpleName().equals(sportString))
-                    sports.remove(sport);
-            }
+            removeSport(sportString);
         }
     }
-    public static boolean removeSport(Sport sport) {
-        return sports.remove(sport);
+    public static boolean removeSport(String sportName) {
+        for (Sport sport : sports) {
+            if (sport.getClass().getSimpleName().equals(sportName))
+                return sports.remove(sport);
+        }
+
+        return false;
     }
 
     // TO DO
@@ -51,6 +66,10 @@ public class SportsManager {
         return state;
     }
 
+    /**
+     * Initialize all the sports originally handled.
+     * Add here newly implemented sports.
+     */
     public static void fillSportsList() {
         sports.add(Volley.getInstance());
         sports.add(Basket.getInstance());

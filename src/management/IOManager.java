@@ -24,40 +24,35 @@ public class IOManager {
         String activeSportsRoute = rootRoute + separator + ".activeSportsFile.txt";
         File activeSportsFile = new File(activeSportsRoute);
 
-        /* TEST - Start app brand new 
-        System.out.println(""
-                + "ActiveSports file: " + activeSportsFile.delete() + "\n"
-                + "SportsDir: " + sportsDir.delete()
-        );*/
-
-        // Check if folder struct exists, if not make it
-        if (!activeSportsFile.exists()) {
-            // TO DO: Move this whole new file creation to a separate function
-            // Make activeSportsFile which will contain every sport handled
-            try {
-                activeSportsFile.createNewFile();
+        try {
+            // Check if activeSportsFile exists, if not make it
+            if (!activeSportsFile.createNewFile()) {
+                // Read which sports to use in the app
+                String sportsNames = readSportsFromActiveSportsFile(activeSportsFile);
+                String[] activeSports = sportsNames.split(stringSeparator);
+                // Remove the ones not being used in the app
+                removeUnsupportedSports(activeSports);
+            } else {
                 // TO DO: Make active sports file hidden
                 //java.nio.file.Files.setAttribute(Paths.get(activeSportsRoute), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
-            } catch (Exception e) {
-                System.out.println("Mal");
+
+                // Write every sport into activeSportsFile
+                writeSportsIntoActiveSportsFile(activeSportsFile);
             }
 
-            // Write every sport into activeSportsFile
-            writeSportsIntoActiveSportsFile(activeSportsFile);
-        } else {
-            // TO DO: Read which sports to use in the app
-            String sportNames = readSportsFromActiveSportsFile(activeSportsFile);
-            // Remove the ones not being used in the app
-            removeNonsupportedSports(sportNames.split(stringSeparator));
-        }
-        if (!sportsDir.exists()) {
             sportsDir.mkdir();
-            // TO DO: create sports folders based on activeSportsFile (already read)
+            // Create sports files based on activeSportsFile (already read)
+            String sportFileRoute = sportsDirRoute + separator;
+            for (String sport : SportsManager.getSports()) {
+                new File(sportFileRoute + sport).createNewFile();
+            }
+        } catch (IOException e) {
+            System.out.println("No se ha podido crear la estructura del programa - Error: " + e);
         }
     }
 
     /**
-     * Write which sports will be handled into activeSportsFile
+     * Write which sports will be handled into activeSportsFile.
      * @param activeSportsFile file holding our sports
      */
     static void writeSportsIntoActiveSportsFile(File activeSportsFile) {
@@ -73,9 +68,10 @@ public class IOManager {
             }
             sportsNamesString = sportsNamesString.substring(0, sportsNamesString.length() - 1);
 
+            // Write sports names into activeSportsFile
             fw.write(sportsNamesString);
         } catch (IOException e) {
-            System.out.println("No se ha podido crear la estructura para el programa - Error: " + e);
+            System.out.println("No se ha podido acceder a la estructura del programa - Error: " + e);
         } finally {
             try {
                 if (fw != null)
@@ -87,40 +83,33 @@ public class IOManager {
     }
 
     /**
-     * Read which sports will be handled from activeSportsFile
+     * Read which sports will be handled from activeSportsFile.
      * @param activeSportsFile file holding our sports
      */
-    static String readSportsFromActiveSportsFile(File activeSportsFile) {
-        FileReader fr = null;
+    static String readSportsFromActiveSportsFile(File activeSportsFile) throws IOException {
+        FileReader fr = new FileReader(activeSportsFile);
+        BufferedReader br = new BufferedReader(fr);
 
-        try {
-            fr = new FileReader(activeSportsFile);
-            BufferedReader br = new BufferedReader(fr);
-
-            // Return sport names string
-            return br.readLine();
-        } catch (FileNotFoundException e) {
-            System.out.println("El archivo a leer no se ha encontrado");
-        } catch (IOException e) {
-            System.out.println("Ha habido un error al leer del archivo " + e.getMessage() + " - Error: " + e);
-        }
-
-        return "";
+        // Return sport names string
+        return br.readLine();
     }
 
     /**
      * Remove every sport whose name is found in sportNames but not in activeSportsFile.
      * @param sportNames names of sports to remove
      */
-    public static void removeUnsupportedSports(String[] sportNames) {
-        // TO DO: Substract getSports() - sportNames
-    }
+    public static void removeUnsupportedSports(String[] activeSportsNames) {
+        String[] sports = SportsManager.getSports();
 
-    static void removeNonsupportedSports(String[] sportNames) {
-        for (String name : sportNames) {
-            for (String sportName : SportsManager.getSports()) {
-
+        // Check if each sport exists in activeSportsFile, if not remove it
+        for (String sport : sports) {
+            boolean exists = false;
+            for (String sportName : activeSportsNames) {
+                if (sport.equals(sportName))
+                    exists = true;
             }
+
+            if (!exists) SportsManager.removeSport(sport);
         }
     }
 }
