@@ -30,14 +30,9 @@ public class SportsManager {
     }
 
     /**
-     * Remove every sport whose name is found in sportNames.
-     * @param sportNames names of sports to remove
+     * Remove sport if its name is found in sportNames.
+     * @param sportName names of sports to remove
      */
-    public static void removeSports(String[] sportNames) {
-        for (String sportString : sportNames) {
-            removeSport(sportString);
-        }
-    }
     public static boolean removeSport(String sportName) {
         for (Sport sport : sports) {
             if (sport.getClass().getSimpleName().equals(sportName))

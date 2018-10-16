@@ -38,14 +38,22 @@ public class Files {
                 do {
                     validOption = true;
 
+                    // TO DO
                     switch (menuOption) {
-                        case 1:
+                        case 1: // ADD STUDENT
+                            System.out.println("Inserta los siguientes datos: Nombre, Apellidos, Curso, Género, Edad y Deporte");
                             break;
-                        case 2:
+                        case 2: // CHECK STUDENT BY COURSE
                             break;
-                        case 3:
+                        case 3: // CHECK SPORTS READINESS
                             break;
-                        case 4: // EXIT
+                        case 4: // REMOVE STUDENT
+                            break;
+                        case 5: // CHECK INSCRIPTIONS
+                            break;
+                        case 6: // REMOVE SPORT
+                            break;
+                        case 0: // EXIT
                             exit = true;
                             break;
                         default:

@@ -3,7 +3,6 @@ package management;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,28 +12,32 @@ import java.nio.file.Paths;
 public class IOManager {
     // Separator to use when writing into / reading from files
     static String stringSeparator = ";";
+    // Operative System's path separator
+    static String separator = File.separator;
+    static String rootPath = System.getProperty("user.dir");
+    // Sports root directory's path
+    static String sportsDirPath = rootPath + separator + "sports";
+
+    /* ----------- SPORTS ----------- */
 
     public static void makeActiveSportsFolders() {
-        String separator = File.separator;
-        String rootRoute = System.getProperty("user.dir");
-        // SPORTS DIRECTORY
-        String sportsDirRoute = rootRoute + separator + "sports";
-        File sportsDir = new File(sportsDirRoute);
-        // ACTIVE SPORTS
-        String activeSportsRoute = rootRoute + separator + ".activeSportsFile.txt";
-        File activeSportsFile = new File(activeSportsRoute);
+        // Sports directory
+        File sportsDir = new File(sportsDirPath);
+        // Active sports file
+        String activeSportsPath = rootPath + separator + ".activeSportsFile.txt";
+        File activeSportsFile = new File(activeSportsPath);
 
         try {
             // Check if activeSportsFile exists, if not make it
             if (!activeSportsFile.createNewFile()) {
-                // Read which sports to use in the app
+                // Read which sports will be handled in the app
                 String sportsNames = readSportsFromActiveSportsFile(activeSportsFile);
                 String[] activeSports = sportsNames.split(stringSeparator);
-                // Remove the ones not being used in the app
+                // Remove the ones not being handled in the app
                 removeUnsupportedSports(activeSports);
             } else {
                 // TO DO: Make active sports file hidden
-                //java.nio.file.Files.setAttribute(Paths.get(activeSportsRoute), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
+                //java.nio.file.Files.setAttribute(Paths.get(activeSportsPath), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
 
                 // Write every sport into activeSportsFile
                 writeSportsIntoActiveSportsFile(activeSportsFile);
@@ -42,9 +45,9 @@ public class IOManager {
 
             sportsDir.mkdir();
             // Create sports files based on activeSportsFile (already read)
-            String sportFileRoute = sportsDirRoute + separator;
+            String sportFilePath = sportsDirPath + separator;
             for (String sport : SportsManager.getSports()) {
-                new File(sportFileRoute + sport).createNewFile();
+                new File(sportFilePath + sport).createNewFile();
             }
         } catch (IOException e) {
             System.out.println("No se ha podido crear la estructura del programa - Error: " + e);
@@ -96,9 +99,9 @@ public class IOManager {
 
     /**
      * Remove every sport whose name is found in sportNames but not in activeSportsFile.
-     * @param sportNames names of sports to remove
+     * @param activeSportsNames names of sports to remove
      */
-    public static void removeUnsupportedSports(String[] activeSportsNames) {
+    static void removeUnsupportedSports(String[] activeSportsNames) {
         String[] sports = SportsManager.getSports();
 
         // Check if each sport exists in activeSportsFile, if not remove it
@@ -111,5 +114,15 @@ public class IOManager {
 
             if (!exists) SportsManager.removeSport(sport);
         }
+    }
+
+    /* ----------- STUDENTS ----------- */
+
+    /**
+     * Write student info into given sport file.
+     * @param studentData student's information (contains sport)
+     */
+    public static void signStudentIntoSport(String[] studentData) {
+        // TO DO
     }
 }
