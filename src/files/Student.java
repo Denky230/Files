@@ -44,4 +44,15 @@ public class Student {
     public void setSport(String sport) {
         this.sport = sport;
     }
+    
+    public String[] getData() {
+        return new String[] {
+                getName(),
+                getSurnames(),
+                getCourse(),
+                Character.toString(getGender()),
+                Integer.toString(getAge()),
+                getSport()
+        };
+    }
 }

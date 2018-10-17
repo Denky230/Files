@@ -1,6 +1,7 @@
 
 package management;
 
+import files.Student;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,41 +12,41 @@ import java.nio.file.Paths;
 
 public class IOManager {
     // Separator to use when writing into / reading from files
-    static String stringSeparator = ";";
+    static final String STRING_SEPARATOR = ";";
     // Operative System's path separator
-    static String separator = File.separator;
-    static String rootPath = System.getProperty("user.dir");
+    static final String PATH_SEPARATOR = File.separator;
+    static final String ROOT_PATH = System.getProperty("user.dir");
     // Sports root directory's path
-    static String sportsDirPath = rootPath + separator + "sports";
+    static final String SPORTS_DIRECTORY_PATH = ROOT_PATH + PATH_SEPARATOR + "sports";
+    // Active sports file
+    static final String ACTIVESPORTS_FILE_PATH = ROOT_PATH + PATH_SEPARATOR + ".activeSportsFile.txt";
+    static File activeSportsFile = new File(ACTIVESPORTS_FILE_PATH);
 
     /* ----------- SPORTS ----------- */
 
     public static void makeActiveSportsFolders() {
         // Sports directory
-        File sportsDir = new File(sportsDirPath);
-        // Active sports file
-        String activeSportsPath = rootPath + separator + ".activeSportsFile.txt";
-        File activeSportsFile = new File(activeSportsPath);
+        File sportsDir = new File(SPORTS_DIRECTORY_PATH);
 
         try {
             // Check if activeSportsFile exists, if not make it
             if (!activeSportsFile.createNewFile()) {
                 // Read which sports will be handled in the app
                 String sportsNames = readSportsFromActiveSportsFile(activeSportsFile);
-                String[] activeSports = sportsNames.split(stringSeparator);
+                String[] activeSports = sportsNames.split(STRING_SEPARATOR);
                 // Remove the ones not being handled in the app
                 removeUnsupportedSports(activeSports);
             } else {
                 // TO DO: Make active sports file hidden
-                //java.nio.file.Files.setAttribute(Paths.get(activeSportsPath), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
+                //java.nio.file.Files.setAttribute(Paths.get(ACTIVESPORTS_FILE_PATH), "dos:hidden", true, LinkOption.NOFOLLOW_LINKS);
 
                 // Write every sport into activeSportsFile
-                writeSportsIntoActiveSportsFile(activeSportsFile);
+                writeSportsIntoActiveSportsFile();
             }
 
             sportsDir.mkdir();
             // Create sports files based on activeSportsFile (already read)
-            String sportFilePath = sportsDirPath + separator;
+            String sportFilePath = SPORTS_DIRECTORY_PATH + PATH_SEPARATOR;
             for (String sport : SportsManager.getSports()) {
                 new File(sportFilePath + sport).createNewFile();
             }
@@ -58,7 +59,7 @@ public class IOManager {
      * Write which sports will be handled into activeSportsFile.
      * @param activeSportsFile file holding our sports
      */
-    static void writeSportsIntoActiveSportsFile(File activeSportsFile) {
+    public static void writeSportsIntoActiveSportsFile() {
         FileWriter fw = null;
 
         try {
@@ -67,7 +68,7 @@ public class IOManager {
             // Make sports names string to write into activeSportsFile
             String sportsNamesString = "";
             for (String sportName : SportsManager.getSports()) {
-                sportsNamesString += sportName + stringSeparator;
+                sportsNamesString += sportName + STRING_SEPARATOR;
             }
             sportsNamesString = sportsNamesString.substring(0, sportsNamesString.length() - 1);
 
@@ -119,10 +120,29 @@ public class IOManager {
     /* ----------- STUDENTS ----------- */
 
     /**
-     * Write student info into given sport file.
+     * Write student info into given sport's file.
      * @param studentData student's information (contains sport)
      */
-    public static void signStudentIntoSport(String[] studentData) {
+    public static void signStudentIntoSport(Student studentData) {
         // TO DO
+        String sportFilePath = SPORTS_DIRECTORY_PATH + STRING_SEPARATOR + studentData.getSport();
+        
+        FileWriter fw = null;
+
+        try {
+            fw = new FileWriter(sportFilePath);
+            
+            // Write sports names into activeSportsFile
+            //fw.write(sportsNamesString);
+        } catch (IOException e) {
+            System.out.println("No se ha podido acceder a la estructura del programa - Error: " + e);
+        } finally {
+            try {
+                if (fw != null)
+                    fw.close();
+            } catch (Exception e) {
+                System.out.println("Ha habido un error al cerrar el archivo " + e.getMessage() + " - Error: " + e);
+            }
+        }
     }
 }

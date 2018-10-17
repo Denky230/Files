@@ -66,7 +66,10 @@ public class SportsManager {
      * Add here newly implemented sports.
      */
     public static void fillSportsList() {
-        sports.add(Volley.getInstance());
+        sports.add(Badminton.getInstance());
         sports.add(Basket.getInstance());
+        sports.add(Football.getInstance());
+        sports.add(Football_Sala.getInstance());
+        sports.add(Volley.getInstance());
     }
 }

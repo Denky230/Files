@@ -3,9 +3,9 @@ package files;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import management.IOManager;
 import management.SportsManager;
+import management.StudentManager;
 
 public class Files {
     public static void main(String[] args) {
@@ -41,17 +41,26 @@ public class Files {
                     // TO DO
                     switch (menuOption) {
                         case 1: // ADD STUDENT
-                            System.out.println("Inserta los siguientes datos: Nombre, Apellidos, Curso, Género, Edad y Deporte");
+                            System.out.println("Introduce los siguientes datos: Nombre, Apellidos, Curso, Género, Edad y Deporte");
+                            // Student s = StudentManager.addStudent(name, surnames, course, 0, menuOption, sport);
+                            //IOManager.signStudentIntoSport(s);
                             break;
                         case 2: // CHECK STUDENT BY COURSE
                             break;
                         case 3: // CHECK SPORTS READINESS
                             break;
                         case 4: // REMOVE STUDENT
+                            // TO DO: Feedback
+                            System.out.println("Introduce nombre y apellidos del alumno a dar de baja");
+                            //StudentManager.removeStudent(name, surnames);
                             break;
                         case 5: // CHECK INSCRIPTIONS
                             break;
                         case 6: // REMOVE SPORT
+                            // TO DO: Feedback
+                            System.out.println("Introduce el nombre del deporte a eliminar");
+                            //SportsManager.removeSport(sportName);
+                            IOManager.writeSportsIntoActiveSportsFile();
                             break;
                         case 0: // EXIT
                             exit = true;
